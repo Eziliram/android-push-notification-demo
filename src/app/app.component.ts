@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
+import { BrazeService } from '@services/braze.service';
 import { PushNotificationService } from '@services/push-notification.service';
 
 @Component({
@@ -9,7 +10,11 @@ import { PushNotificationService } from '@services/push-notification.service';
   imports: [IonApp, IonRouterOutlet]
 })
 export class AppComponent {
-  constructor(private pushNotificationService: PushNotificationService) {
+  constructor(
+    private pushNotificationService: PushNotificationService,
+    private brazeService: BrazeService
+  ) {
     this.pushNotificationService.init();
+    this.brazeService.init();
   }
 }
