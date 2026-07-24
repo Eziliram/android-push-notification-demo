@@ -4,6 +4,7 @@ import { addIcons } from 'ionicons';
 import { notificationsOutline } from 'ionicons/icons';
 import anime, { AnimeInstance } from 'animejs';
 import { BrazeService } from '@services/braze.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inbox-button',
@@ -50,7 +51,10 @@ export class InboxButtonComponent implements AfterViewInit {
   private shakeAnimation?: AnimeInstance;
   private unreadMessageCount = 0;
 
-  constructor(private brazeService: BrazeService) {
+  constructor(
+    private readonly router: Router,
+    private brazeService: BrazeService
+  ) {
     addIcons({ notificationsOutline });
 
     effect(() => {
@@ -67,7 +71,7 @@ export class InboxButtonComponent implements AfterViewInit {
   }
 
   showInbox(): void {
-    // TODO: Show Inbox component in Modal when tapping Bell icon
+    this.router.navigate(["/inbox"]);
   }
 
   ngAfterViewInit(): void {
