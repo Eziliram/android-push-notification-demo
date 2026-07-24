@@ -1,5 +1,9 @@
 ion-card {
   --background: white;
   border-radius: 1rem;
-  box-shadow: none;
+  box-shadow: 0 2px 12px rgba(var(--ion-color-dark-rgb), 0.12);
+}
+
+ion-card-title {
+  font-size: 1.15rem;
 }

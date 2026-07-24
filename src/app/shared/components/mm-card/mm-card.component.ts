@@ -1,10 +1,12 @@
 import { Component, input } from '@angular/core';
 import { ImageLoaderComponent } from '@components/image-loader/image-loader.component';
-import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonImg } from '@ionic/angular/standalone';
+import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { closeCircleOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-mm-card',
-  template: ` <ion-card class="ion-no-padding">
+  template: ` <ion-card>
     <ion-card-header>
       @if (title(); as title) {
       <ion-card-title>
@@ -14,12 +16,22 @@ import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonImg } from '@i
             <app-image-loader
               src="assets/icon/mm-cc-logo.png"
               imageClass="iconize"
-              maxWidth="30px"
-              skeletonDiameter="30px"
-              skeletonBorderRadius="30px"
-            ></app-image-loader>
+              maxWidth="50px"
+              skeletonDiameter="50px"
+              skeletonBorderRadius="50px"
+            />
           </div>
           } {{ title }}
+
+          @if (showDismiss()) {
+             <ion-icon
+              color="danger"
+              slot="icon-only"
+              name="close-circle-outline"
+              size="large"
+              (click)="handleDismiss()"
+            />
+          }
         </div>
       </ion-card-title>
       }
@@ -31,9 +43,25 @@ import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonImg } from '@i
   </ion-card>`,
   styles: [],
   standalone: true,
-  imports: [IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonImg, ImageLoaderComponent]
+  imports: [
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    ImageLoaderComponent,
+    IonIcon
+  ]
 })
 export class MmCardComponent {
   title = input('Mama Money');
   showIcon = input(true);
+  showDismiss = input(false);
+
+  constructor() {
+    addIcons({ closeCircleOutline });
+  }
+
+  handleDismiss() {
+    console.log('TODO: Dismiss notification');
+  }
 }
