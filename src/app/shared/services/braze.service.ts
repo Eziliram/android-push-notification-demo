@@ -13,4 +13,8 @@ export class BrazeService {
         braze.logCustomEvent(event);
         braze.requestImmediateDataFlush();
     }
+
+    requestContentCardsRefresh(): void {
+        braze.requestContentCardsRefresh();
+    }
 }
