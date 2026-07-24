@@ -10,6 +10,7 @@ export class BrazeService {
 
     init(): void {
         braze.changeUser("test-user-marilize");
+        this.loadInboxContentCards();
     }
 
     logCustomEvent(event: string): void {
@@ -17,14 +18,30 @@ export class BrazeService {
         braze.requestImmediateDataFlush();
     }
 
+    loadInboxContentCards(): void {
+        braze.getContentCardsFromCache(
+            (cards: BrazeContentCard[]) => {
+                this.updateInboxContentCards(cards);
+                this.fetchInboxContentCards();
+            },
+            () => {
+                this.fetchInboxContentCards();
+            }
+        )
+    }
+
+    updateInboxContentCards(cards: BrazeContentCard[]): void {
+        const inboxContentCards = cards.filter(
+            card => card.extras?.type === "inbox" && !card.dismissed
+        )
+
+        this.inboxContentCards.set(inboxContentCards);
+    }
+
     fetchInboxContentCards(): void {
         braze.getContentCardsFromServer(
             (cards: BrazeContentCard[]) => {
-                const inboxContentCards = cards.filter(
-                    card => card.extras?.type === "inbox"
-                );
-                
-                this.inboxContentCards.set(inboxContentCards);
+                this.updateInboxContentCards(cards);
             },
             (error: unknown) => {
                 console.error("Failed to fetch Braze content cards:", error);
