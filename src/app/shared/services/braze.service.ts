@@ -1,7 +1,5 @@
 import { Injectable, signal } from "@angular/core";
 import { BrazeContentCard } from "@models/braze/braze-content-card";
-import { BrazeAltPushContentCard } from "@models/braze/braze-push-content-card";
-import { convertToBrazeContentCard } from "@utils/braze/convert-content-card";
 import braze from "braze-cordova-sdk";
 
 @Injectable({
@@ -20,12 +18,11 @@ export class BrazeService {
     }
 
     fetchInboxContentCards(): void {
-        braze.requestContentCardsRefresh();
         braze.getContentCardsFromServer(
-            (altCards: BrazeAltPushContentCard[]) => {
-                const cards = altCards as unknown as BrazeContentCard[];
-
-                const inboxContentCards = cards.filter(card => card.extras.type === "inbox");
+            (cards: BrazeContentCard[]) => {
+                const inboxContentCards = cards.filter(
+                    card => card.extras?.type === "inbox"
+                );
                 
                 this.inboxContentCards.set(inboxContentCards);
             },
