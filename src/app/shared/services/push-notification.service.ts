@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BrazeParsedExtra, BrazePushNotification } from '@models/braze/braze-push-notification';
 import { PushNotifications, PushNotificationSchema } from '@capacitor/push-notifications';
 import { BrazeService } from './braze.service';
+import { JSONParse } from '@utils/json-parse';
 
 @Injectable({
   providedIn: 'root'
@@ -24,14 +25,10 @@ export class PushNotificationService {
           return;
         }
 
-        try {
-          const parsedExtra: BrazeParsedExtra = JSON.parse(extra);
+        const parsedExtra: BrazeParsedExtra | null = JSONParse(extra);
 
-          if (parsedExtra.type === "inbox") {
-            this.brazeService.requestContentCardsRefresh();
-          }
-        } catch (error) {
-          console.error("Unable to parse push notification extras:", error);
+        if (parsedExtra?.type === "inbox") {
+          this.brazeService.fetchInboxContentCards();
         }
       }
     );
