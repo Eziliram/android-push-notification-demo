@@ -28,9 +28,9 @@ import { BrazeService } from '@services/braze.service';
   imports: [IonHeader, IonContent, IonButton, HeaderComponent, MmCardComponent]
 })
 export class HomePage {
-  constructor(private brazeService: BrazeService) {}
+  constructor(private readonly brazeService: BrazeService) {}
 
   sendInboxTestEvent(): void {
-    this.brazeService.logCustomEvent("INBOX_MESSAGE_TEST");
+    this.brazeService.logCustomEvent('INBOX_MESSAGE_TEST');
   }
 }

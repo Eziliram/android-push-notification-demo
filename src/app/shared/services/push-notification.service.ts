@@ -8,9 +8,9 @@ import { JSONParse } from '@utils/json-parse';
   providedIn: 'root'
 })
 export class PushNotificationService {
-  constructor(private brazeService: BrazeService) {}
+  constructor(private readonly brazeService: BrazeService) {}
 
-  init() {
+  init(): void {
     PushNotifications.addListener('registration', (token) => {
       console.log('~ PushNotificationService ~ token:', token);
     });
@@ -18,15 +18,15 @@ export class PushNotificationService {
     PushNotifications.addListener(
       'pushNotificationReceived',
       (notification: PushNotificationSchema | BrazePushNotification) => {
-        const extra = notification.data?.["extra"];
+        const extra = notification.data?.['extra'];
 
-        if (typeof extra !== "string") {
+        if (typeof extra !== 'string') {
           return;
         }
 
         const parsedExtra: BrazeParsedExtra | null = JSONParse(extra);
 
-        if (parsedExtra?.type === "inbox") {
+        if (parsedExtra?.type === 'inbox') {
           this.brazeService.fetchInboxContentCards();
         }
       }

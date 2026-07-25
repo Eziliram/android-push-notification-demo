@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { ImageLoaderComponent } from '@components/image-loader/image-loader.component';
-import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonIcon } from '@ionic/angular/standalone';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { closeCircleOutline } from 'ionicons/icons';
 
@@ -24,13 +24,9 @@ import { closeCircleOutline } from 'ionicons/icons';
           } {{ title }}
 
           @if (showDismiss()) {
-             <ion-icon
-              color="danger"
-              slot="icon-only"
-              name="close-circle-outline"
-              size="large"
-              (click)="handleDismiss($event)"
-            />
+          <ion-button aria-label="Dismiss notification" color="danger" fill="clear" (click)="handleDismiss($event)">
+            <ion-icon slot="icon-only" name="close-circle-outline" size="large" />
+          </ion-button>
           }
         </div>
       </ion-card-title>
@@ -43,14 +39,7 @@ import { closeCircleOutline } from 'ionicons/icons';
   </ion-card>`,
   styles: [],
   standalone: true,
-  imports: [
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardContent,
-    ImageLoaderComponent,
-    IonIcon
-  ]
+  imports: [IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, ImageLoaderComponent, IonIcon]
 })
 export class MmCardComponent {
   title = input('Mama Money');

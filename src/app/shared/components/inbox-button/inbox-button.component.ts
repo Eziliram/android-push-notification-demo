@@ -44,23 +44,16 @@ import { Router } from '@angular/router';
 })
 export class InboxButtonComponent implements AfterViewInit {
   readonly slot = input<IonAccordion['toggleIconSlot']>();
-  readonly unreadMessages = computed(() =>
-    this.brazeService.inboxContentCards().some(card => !card.viewed)
-  )
+  readonly unreadMessages = computed(() => this.brazeService.inboxContentCards().some((card) => !card.viewed));
 
   private shakeAnimation?: AnimeInstance;
   private unreadMessageCount = 0;
 
-  constructor(
-    private readonly router: Router,
-    private brazeService: BrazeService
-  ) {
+  constructor(private readonly router: Router, private readonly brazeService: BrazeService) {
     addIcons({ notificationsOutline });
 
     effect(() => {
-      const unreadMessageCount = this.brazeService
-        .inboxContentCards()
-        .filter(card => !card.viewed).length;
+      const unreadMessageCount = this.brazeService.inboxContentCards().filter((card) => !card.viewed).length;
 
       if (unreadMessageCount > this.unreadMessageCount) {
         this.shakeAnimation?.restart();
@@ -71,7 +64,7 @@ export class InboxButtonComponent implements AfterViewInit {
   }
 
   showInbox(): void {
-    this.router.navigate(["/inbox"]);
+    this.router.navigate(['/inbox']);
   }
 
   ngAfterViewInit(): void {

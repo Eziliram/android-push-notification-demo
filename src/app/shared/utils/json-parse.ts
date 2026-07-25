@@ -1,4 +1,4 @@
-export function JSONParse<ReturnType = Record<string, any>>(str: string): ReturnType | null {
+export function JSONParse<ReturnType = Record<string, unknown>>(str: string): ReturnType | null {
   try {
     return JSON.parse(str);
   } catch (error) {

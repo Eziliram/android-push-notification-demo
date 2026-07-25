@@ -11,8 +11,8 @@ import { PushNotificationService } from '@services/push-notification.service';
 })
 export class AppComponent {
   constructor(
-    private pushNotificationService: PushNotificationService,
-    private brazeService: BrazeService
+    private readonly pushNotificationService: PushNotificationService,
+    private readonly brazeService: BrazeService
   ) {
     this.pushNotificationService.init();
     this.brazeService.init();
