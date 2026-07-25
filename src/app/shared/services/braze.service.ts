@@ -55,4 +55,15 @@ export class BrazeService {
             cards => cards.filter(card => card.id !== cardId)
         );
     }
+
+    logContentCardImpression(cardId: string): void {
+        braze.logContentCardImpression(cardId);
+        this.inboxContentCards.update(cards =>
+            cards.map(card =>
+                card.id === cardId
+                    ? { ...card, viewed: true }
+                    : card
+            )
+        );
+    }
 }

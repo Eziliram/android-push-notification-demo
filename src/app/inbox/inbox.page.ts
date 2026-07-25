@@ -67,6 +67,12 @@ export class InboxPage {
        this.router.navigate(['/']);
     }
 
+    ionViewDidEnter(): void {
+        this.brazeService.inboxContentCards().forEach(card => {
+            this.brazeService.logContentCardImpression(card.id);
+        });
+    }
+
     async confirmDismiss(cardId: string): Promise<void> {
         const alert = await this.alertController.create({
             header: 'Delete Message',
