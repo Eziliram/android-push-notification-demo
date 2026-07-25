@@ -66,4 +66,15 @@ export class BrazeService {
             )
         );
     }
+
+    logContentCardClick(cardId: string): void {
+        braze.logContentCardClicked(cardId);
+        this.inboxContentCards.update(cards =>
+            cards.map(card =>
+                card.id === cardId
+                    ? { ...card, clicked: true }
+                    : card
+            )
+        );
+    }
 }

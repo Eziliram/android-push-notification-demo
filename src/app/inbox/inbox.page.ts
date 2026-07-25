@@ -9,6 +9,7 @@ import { HeaderComponent } from "@components/header/header.component";
 import { BrazeService } from "@services/braze.service";
 import { MmCardComponent } from "@components/mm-card/mm-card.component";
 import { DateTimeStringPipe } from "../shared/pipes/date-time-string.pipe";
+import { BrazeContentCard } from "@models/braze/braze-content-card";
 
 @Component({
     selector: 'app-inbox',
@@ -25,8 +26,10 @@ import { DateTimeStringPipe } from "../shared/pipes/date-time-string.pipe";
                 ) {
                     <app-mm-card
                         [title]="card.title ?? 'Mama Money'"
-                        [showDismiss]="true"
+                        [showDismiss]="card.dismissible"
+                        [clickable]="!!card.url"
                         (dismiss)="confirmDismiss(card.id)"
+                        (cardClick)="openContentCard(card)"
                     >
                         @if (card.cardDescription) {
                             <p class="notification-description">
@@ -71,6 +74,17 @@ export class InboxPage {
         this.brazeService.inboxContentCards().forEach(card => {
             this.brazeService.logContentCardImpression(card.id);
         });
+    }
+
+    openContentCard(card: BrazeContentCard): void {
+        if (!card.url) {
+            return;
+        }
+
+        this.brazeService.logContentCardClick(card.id);
+
+        const deepLink = new URL(card.url);
+        void this.router.navigate([deepLink.hostname]);
     }
 
     async confirmDismiss(cardId: string): Promise<void> {
