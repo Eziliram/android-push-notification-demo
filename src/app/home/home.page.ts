@@ -31,7 +31,6 @@ export class HomePage {
   constructor(private brazeService: BrazeService) {}
 
   sendInboxTestEvent(): void {
-    // TODO: Log Braze custom event INBOX_MESSAGE_TEST to trigger an Inbox push notification and accompanying content card
     this.brazeService.logCustomEvent("INBOX_MESSAGE_TEST");
   }
 }

@@ -18,7 +18,6 @@ export class PushNotificationService {
     PushNotifications.addListener(
       'pushNotificationReceived',
       (notification: PushNotificationSchema | BrazePushNotification) => {
-        // TODO: Implement content card checking functionality when receiving Braze push notification with type === 'inbox' in "Extra's"
         const extra = notification.data?.["extra"];
 
         if (typeof extra !== "string") {
