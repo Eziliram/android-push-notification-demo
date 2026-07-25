@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { ImageLoaderComponent } from '@components/image-loader/image-loader.component';
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -56,12 +56,13 @@ export class MmCardComponent {
   title = input('Mama Money');
   showIcon = input(true);
   showDismiss = input(false);
+  dismiss = output<void>();
 
   constructor() {
     addIcons({ closeCircleOutline });
   }
 
-  handleDismiss() {
-    console.log('TODO: Dismiss notification');
+  handleDismiss(): void {
+    this.dismiss.emit();
   }
 }

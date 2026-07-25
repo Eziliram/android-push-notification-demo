@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import {
+  AlertController,
   IonContent,
   IonHeader,
 } from '@ionic/angular/standalone';
@@ -25,6 +26,7 @@ import { DateTimeStringPipe } from "../shared/pipes/date-time-string.pipe";
                     <app-mm-card
                         [title]="card.title ?? 'Mama Money'"
                         [showDismiss]="true"
+                        (dismiss)="confirmDismiss(card.id)"
                     >
                         @if (card.cardDescription) {
                             <p class="notification-description">
@@ -57,10 +59,33 @@ import { DateTimeStringPipe } from "../shared/pipes/date-time-string.pipe";
 export class InboxPage {
     constructor(
         private readonly router: Router,
+        private readonly alertController: AlertController,
         protected readonly brazeService: BrazeService
     ) {}
 
     navigateBack(): void {
        this.router.navigate(['/']);
+    }
+
+    async confirmDismiss(cardId: string): Promise<void> {
+        const alert = await this.alertController.create({
+            header: 'Delete Message',
+            message: 'Are you sure you would like to delete this message?',
+            buttons: [
+                {
+                    text: 'No',
+                    role: 'cancel'
+                },
+                {
+                    text: 'Yes',
+                    role: 'destructive',
+                    handler: () => {
+                        this.brazeService.dismissContentCard(cardId);
+                    }
+                }
+            ]
+        });
+
+        await alert.present();
     }
 }

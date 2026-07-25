@@ -48,4 +48,11 @@ export class BrazeService {
             }
         )
     }
+
+    dismissContentCard(cardId: string): void {
+        braze.logContentCardDismissed(cardId);
+        this.inboxContentCards.update(
+            cards => cards.filter(card => card.id !== cardId)
+        );
+    }
 }
