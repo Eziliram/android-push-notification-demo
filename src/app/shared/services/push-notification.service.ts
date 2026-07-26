@@ -1,8 +1,13 @@
-import { Injectable } from '@angular/core';
-import { BrazeParsedExtra, BrazePushNotification } from '@models/braze/braze-push-notification';
-import { PushNotifications, PushNotificationSchema } from '@capacitor/push-notifications';
-import { BrazeService } from './braze.service';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { PushNotifications, PushNotificationsPlugin } from '@capacitor/push-notifications';
+import { BrazeParsedExtra } from '@models/braze/braze-push-notification';
 import { JSONParse } from '@utils/json-parse';
+import { BrazeService } from './braze.service';
+
+export const PUSH_NOTIFICATIONS = new InjectionToken<PushNotificationsPlugin>('PUSH_NOTIFICATIONS', {
+  providedIn: 'root',
+  factory: () => PushNotifications
+});
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +15,10 @@ import { JSONParse } from '@utils/json-parse';
 export class PushNotificationService {
   private initialisation?: Promise<void>;
 
-  constructor(private readonly brazeService: BrazeService) {}
+  constructor(
+    private readonly brazeService: BrazeService,
+    @Inject(PUSH_NOTIFICATIONS) private readonly pushNotifications: PushNotificationsPlugin
+  ) {}
 
   init(): Promise<void> {
     this.initialisation ??= this.initPushNotifications();
@@ -19,38 +27,35 @@ export class PushNotificationService {
 
   private async initPushNotifications(): Promise<void> {
     await Promise.all([
-      PushNotifications.addListener(
-        'registration',
-        (token) => console.log('~ PushNotificationService ~ token:', token)),
-      PushNotifications.addListener(
-        'pushNotificationReceived',
-        (notification: PushNotificationSchema | BrazePushNotification) => {
-          const extra = notification.data?.['extra'];
-
-          if (typeof extra !== 'string') {
-            return;
-          }
-
-          const parsedExtra = JSONParse(extra);
-
-          if (isInboxExtra(parsedExtra)) {
-            this.brazeService.fetchInboxContentCards();
-          }
-        }
+      this.pushNotifications.addListener('registration', (token) =>
+        console.log('~ PushNotificationService ~ token:', token)
       ),
-      PushNotifications.addListener(
-        'registrationError',
-        (error) => console.error('Push notification registration failed:', error))
+      this.pushNotifications.addListener('pushNotificationReceived', (notification) => {
+        const extra = notification.data?.['extra'];
+
+        if (typeof extra !== 'string') {
+          return;
+        }
+
+        const parsedExtra = JSONParse(extra);
+
+        if (isInboxExtra(parsedExtra)) {
+          this.brazeService.fetchInboxContentCards();
+        }
+      }),
+      this.pushNotifications.addListener('registrationError', (error) =>
+        console.error('Push notification registration failed:', error)
+      )
     ]);
 
-    let permissionStatus = await PushNotifications.checkPermissions();
+    let permissionStatus = await this.pushNotifications.checkPermissions();
 
     if (permissionStatus.receive === 'prompt') {
-      permissionStatus = await PushNotifications.requestPermissions();
+      permissionStatus = await this.pushNotifications.requestPermissions();
     }
 
     if (permissionStatus.receive === 'granted') {
-      await PushNotifications.register();
+      await this.pushNotifications.register();
     }
   }
 }
