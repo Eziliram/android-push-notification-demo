@@ -7,24 +7,20 @@ This technical assessment evaluates your ability to implement a push notificatio
 ## Flow
 
 1. Homepage: Send custom event "INBOX_MESSAGE_TEST" via Braze SDK
-
    - Implemented in [`HomePage`](src/app/home/home.page.ts)
    - Triggers Braze campaign to send push notification
 
 2. Push Notification: Handle incoming notification
-
    - [`PushNotificationService`](src/app/shared/services/push-notification.service.ts) receives notification
    - Check if notification type is 'inbox'
    - Trigger content card fetch
 
 3. Content Cards: Fetch and filter
-
    - Fetch contend cards from Braze
    - Filter cards with type 'inbox'
    - Update inbox state
 
 4. UI Updates: Reflect new messages
-
    - [`InboxButtonComponent`](src/app/shared/components/inbox-button/inbox-button.component.ts) shows unread indicator
    - Animate notification icon
    - Update inbox card list
@@ -58,15 +54,71 @@ Implement a fully functional Braze push notification and content card inbox syst
   - Implement card dismissal functionality with confirmation dialog
   - Handle deep linking for card URLs
 
-## Getting Started
+## Reviewer setup
 
-1. `npm install`
-2. Application can built using `npm run build:android`
-3. Application can run in live-reload using `npm run start:android`
+### Prerequisites
+
+Before running the project, make sure the following are installed:
+
+- Node.js and npm
+- Ionic CLI
+- Android Studio with an Android SDK and emulator, or a connected Android device
+- A compatible JDK configured for Android builds
+
+### Environment variables
+
+Create a `.env` file in the root of the project and copy the supplied values into it:
+
+```env
+BRAZE_ANDROID_KEY=
+BRAZE_ENDPOINT=
+FCM_SENDER_ID=
+```
+
+These values are used when Capacitor generates the Android configuration. The `.env` file is ignored by Git and
+should not be committed.
+
+### Install and run
+
+Install the project dependencies:
+
+```bash
+npm install
+```
+
+Choose the commands for your operating system.
+
+#### macOS or Linux
+
+```bash
+npm run build:android
+npm run start:android
+```
+
+#### Windows
+
+```bash
+npm run build:android:win
+npm run start:android:win
+```
+
+The start command opens the Android target through Capacitor with live reload. Select an emulator or connected device
+when prompted.
+
+When the app opens for the first time, allow notification permission so the push notification flow can be tested.
+
+### Run the checks
+
+To run linting, formatting checks, and unit tests:
+
+```bash
+npm run verify
+```
+
+The individual checks can also be run with `npm run lint`, `npm run format:check`, and `npm test`.
 
 ## Notes
 
-- A `.env` file has been supplied with credentials needed to access external resources
 - You are only required to develop for Android
 - The existing codebase includes guidance comments(Search codebase for TODO's), but you are encouraged to implement solutions that you believe best demonstrate your expertise
 - Follow Angular best practices and maintain consistent code style
