@@ -8,43 +8,53 @@ import { JSONParse } from '@utils/json-parse';
   providedIn: 'root'
 })
 export class PushNotificationService {
+  private initialisation?: Promise<void>;
+
   constructor(private readonly brazeService: BrazeService) {}
 
-  init(): void {
-    PushNotifications.addListener('registration', (token) => {
-      console.log('~ PushNotificationService ~ token:', token);
-    });
-
-    PushNotifications.addListener(
-      'pushNotificationReceived',
-      (notification: PushNotificationSchema | BrazePushNotification) => {
-        const extra = notification.data?.['extra'];
-
-        if (typeof extra !== 'string') {
-          return;
-        }
-
-        const parsedExtra: BrazeParsedExtra | null = JSONParse(extra);
-
-        if (parsedExtra?.type === 'inbox') {
-          this.brazeService.fetchInboxContentCards();
-        }
-      }
-    );
-
-    this.registerPush();
+  init(): Promise<void> {
+    this.initialisation ??= this.initPushNotifications();
+    return this.initialisation;
   }
 
-  async registerPush(): Promise<void> {
-    let pushReq = await PushNotifications.checkPermissions();
+  private async initPushNotifications(): Promise<void> {
+    await Promise.all([
+      PushNotifications.addListener(
+        'registration',
+        (token) => console.log('~ PushNotificationService ~ token:', token)),
+      PushNotifications.addListener(
+        'pushNotificationReceived',
+        (notification: PushNotificationSchema | BrazePushNotification) => {
+          const extra = notification.data?.['extra'];
 
-    if (pushReq.receive === 'prompt') {
-      pushReq = await PushNotifications.requestPermissions();
+          if (typeof extra !== 'string') {
+            return;
+          }
+
+          const parsedExtra = JSONParse(extra);
+
+          if (isInboxExtra(parsedExtra)) {
+            this.brazeService.fetchInboxContentCards();
+          }
+        }
+      ),
+      PushNotifications.addListener(
+        'registrationError',
+        (error) => console.error('Push notification registration failed:', error))
+    ]);
+
+    let permissionStatus = await PushNotifications.checkPermissions();
+
+    if (permissionStatus.receive === 'prompt') {
+      permissionStatus = await PushNotifications.requestPermissions();
     }
 
-    if (pushReq.receive) {
-      // Ask iOS user for permission/auto grant android permission
+    if (permissionStatus.receive === 'granted') {
       await PushNotifications.register();
     }
   }
+}
+
+function isInboxExtra(value: unknown): value is BrazeParsedExtra {
+  return typeof value === 'object' && value !== null && 'type' in value && value.type === 'inbox';
 }

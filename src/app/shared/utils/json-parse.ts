@@ -1,8 +1,8 @@
-export function JSONParse<ReturnType = Record<string, unknown>>(str: string): ReturnType | null {
+export function JSONParse(value: string): unknown {
   try {
-    return JSON.parse(str);
+    return JSON.parse(value);
   } catch (error) {
-    console.log('💩 ~ Json parse error:', error);
+    console.warn('💩 ~ Json parse error:', error);
 
     return null;
   }

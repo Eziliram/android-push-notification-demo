@@ -14,7 +14,9 @@ export class AppComponent {
     private readonly pushNotificationService: PushNotificationService,
     private readonly brazeService: BrazeService
   ) {
-    this.pushNotificationService.init();
     this.brazeService.init();
+    void this.pushNotificationService.init().catch((error: unknown) => {
+      console.error('Unable to initialize push notifications:', error);
+    });
   }
 }

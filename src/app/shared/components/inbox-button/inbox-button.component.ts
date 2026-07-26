@@ -11,9 +11,9 @@ import { Router } from '@angular/router';
   template: `
     <div class="notification-button">
       @if (unreadMessages()) {
-      <svg class="notification-button-unread" height="10" width="10" xmlns="http://www.w3.org/2000/svg">
-        <circle r="4.5" cx="5" cy="5" fill="red" />
-      </svg>
+        <svg class="notification-button-unread" height="10" width="10" xmlns="http://www.w3.org/2000/svg">
+          <circle r="4.5" cx="5" cy="5" fill="red" />
+        </svg>
       }
       <ion-button class="bell" [slot]="slot()" fill="clear" (click)="showInbox()">
         <ion-icon color="dark" slot="icon-only" name="notifications-outline"></ion-icon>
@@ -49,7 +49,10 @@ export class InboxButtonComponent implements AfterViewInit {
   private shakeAnimation?: AnimeInstance;
   private unreadMessageCount = 0;
 
-  constructor(private readonly router: Router, private readonly brazeService: BrazeService) {
+  constructor(
+    private readonly router: Router,
+    private readonly brazeService: BrazeService
+  ) {
     addIcons({ notificationsOutline });
 
     effect(() => {

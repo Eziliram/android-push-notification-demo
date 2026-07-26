@@ -15,27 +15,29 @@ import { BrazeContentCard } from '@models/braze/braze-content-card';
     </ion-header>
 
     <ion-content [fullscreen]="true" class="ion-padding">
-      @if (brazeService.inboxContentCards().length > 0) { @for ( card of brazeService.inboxContentCards(); track card.id
-      ) {
-      <app-mm-card
-        [title]="card.title ?? 'Mama Money'"
-        [showDismiss]="card.dismissible"
-        [clickable]="!!card.url"
-        (dismiss)="confirmDismiss(card.id)"
-        (cardClick)="openContentCard(card)"
-      >
-        @if (card.cardDescription) {
-        <p class="notification-description">
-          {{ card.cardDescription }}
-        </p>
-        } @if (card.created) {
-        <p class="notification-date">
-          {{ card.created | dateTimeString }}
-        </p>
+      @if (brazeService.inboxContentCards().length > 0) {
+        @for (card of brazeService.inboxContentCards(); track card.id) {
+          <app-mm-card
+            [title]="card.title ?? 'Mama Money'"
+            [showDismiss]="card.dismissible"
+            [clickable]="!!card.url"
+            (cardClick)="openContentCard(card)"
+            (dismiss)="confirmDismiss(card.id)"
+          >
+            @if (card.cardDescription) {
+              <p class="notification-description">
+                {{ card.cardDescription }}
+              </p>
+            }
+            @if (card.created) {
+              <p class="notification-date">
+                {{ card.created | dateTimeString }}
+              </p>
+            }
+          </app-mm-card>
         }
-      </app-mm-card>
-      } } @else {
-      <p>You have no notifications.</p>
+      } @else {
+        <p>You have no notifications.</p>
       }
     </ion-content>
   `,
@@ -65,8 +67,6 @@ export class InboxPage {
       return;
     }
 
-    this.brazeService.logContentCardClick(card.id);
-
     try {
       const deepLink = new URL(card.url);
       const route = deepLink.hostname;
@@ -77,6 +77,7 @@ export class InboxPage {
         return;
       }
 
+      this.brazeService.logContentCardClick(card.id);
       void this.router.navigate([route]);
     } catch (error) {
       console.error(`Invalid content card URL: ${card.url}`, error);

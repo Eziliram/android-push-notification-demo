@@ -6,7 +6,9 @@ import braze from 'braze-cordova-sdk';
   providedIn: 'root'
 })
 export class BrazeService {
-  readonly inboxContentCards = signal<BrazeContentCard[]>([]);
+  private readonly inboxContentCardsState = signal<BrazeContentCard[]>([]);
+
+  readonly inboxContentCards = this.inboxContentCardsState.asReadonly();
 
   init(): void {
     braze.changeUser('assessment-test-user');
@@ -33,7 +35,7 @@ export class BrazeService {
   updateInboxContentCards(cards: BrazeContentCard[]): void {
     const inboxContentCards = cards.filter((card) => card.extras?.type === 'inbox' && !card.dismissed);
 
-    this.inboxContentCards.set(inboxContentCards);
+    this.inboxContentCardsState.set(inboxContentCards);
   }
 
   fetchInboxContentCards(): void {
@@ -49,19 +51,19 @@ export class BrazeService {
 
   dismissContentCard(cardId: string): void {
     braze.logContentCardDismissed(cardId);
-    this.inboxContentCards.update((cards) => cards.filter((card) => card.id !== cardId));
+    this.inboxContentCardsState.update((cards) => cards.filter((card) => card.id !== cardId));
   }
 
   logContentCardImpression(cardId: string): void {
     braze.logContentCardImpression(cardId);
-    this.inboxContentCards.update((cards) =>
+    this.inboxContentCardsState.update((cards) =>
       cards.map((card) => (card.id === cardId ? { ...card, viewed: true } : card))
     );
   }
 
   logContentCardClick(cardId: string): void {
     braze.logContentCardClicked(cardId);
-    this.inboxContentCards.update((cards) =>
+    this.inboxContentCardsState.update((cards) =>
       cards.map((card) => (card.id === cardId ? { ...card, clicked: true } : card))
     );
   }

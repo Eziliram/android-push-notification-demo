@@ -41,11 +41,11 @@
  * This will create a flex container with row direction, centered content, and centered items.
  */
 
-$directions: ("reverse", "regular");
-$orientations: ("row", "column");
-$alignments: ("justify-content", "align-items", "align-self", "align-content");
-$justify-content: ("flex-start", "center", "flex-end", "space-between");
-$align-items: ("flex-start", "center", "flex-end");
+$directions: ('reverse', 'regular');
+$orientations: ('row', 'column');
+$alignments: ('justify-content', 'align-items', 'align-self', 'align-content');
+$justify-content: ('flex-start', 'center', 'flex-end', 'space-between');
+$align-items: ('flex-start', 'center', 'flex-end');
 
 .flex {
   display: flex;
@@ -54,7 +54,7 @@ $align-items: ("flex-start", "center", "flex-end");
 // Flex Directions
 @each $orientation in $orientations {
   @each $dir in $directions {
-    @if $dir == "reverse" {
+    @if $dir == 'reverse' {
       .flex-#{str-slice($orientation, 0, 3)}-#{str-slice($dir, 0, 3)} {
         display: flex;
         flex-direction: #{$orientation}-#{$dir};
@@ -70,17 +70,17 @@ $align-items: ("flex-start", "center", "flex-end");
 
 @each $alignment in $alignments {
   // * Justify Content
-  @if $alignment == "justify-content" {
+  @if $alignment == 'justify-content' {
     @each $justify in $justify-content {
-      @if $justify == "flex-start" {
+      @if $justify == 'flex-start' {
         .#{str-slice($alignment,0,7)}-#{str-slice($justify, 6)} {
           justify-content: flex-start;
         }
-      } @else if $justify == "flex-end" {
+      } @else if $justify == 'flex-end' {
         .#{str-slice($alignment,0,7)}-#{str-slice($justify, 6)} {
           justify-content: flex-end;
         }
-      } @else if $justify == "space-between" {
+      } @else if $justify == 'space-between' {
         .#{str-slice($alignment,0,7)}-#{$justify} {
           justify-content: space-between;
         }
@@ -93,19 +93,13 @@ $align-items: ("flex-start", "center", "flex-end");
   }
 
   // * Align Content
-  @if $alignment ==
-    "align-content" or
-    $alignment ==
-    "align-self" or
-    $alignment ==
-    "align-items"
-  {
+  @if $alignment == 'align-content' or $alignment == 'align-self' or $alignment == 'align-items' {
     @each $align in $align-items {
-      @if $align == "flex-start" {
+      @if $align == 'flex-start' {
         .#{$alignment}-#{str-slice($align, 6)} {
           #{$alignment}: flex-start;
         }
-      } @else if $align == "flex-end" {
+      } @else if $align == 'flex-end' {
         .#{$alignment}-#{str-slice($align, 6)} {
           #{$alignment}: flex-end;
         }

@@ -8,13 +8,13 @@ import { arrowBack } from 'ionicons/icons';
   selector: 'app-header',
   template: ` <ion-toolbar>
     @if (showBackButton()) {
-    <ion-button class="back-btn" (click)="backEvent.emit()" fill="clear" slot="start">
-      <ion-icon color="dark" name="arrow-back" slot="icon-only"></ion-icon>
-    </ion-button>
+      <ion-button class="back-btn" (click)="backEvent.emit()" fill="clear" slot="start">
+        <ion-icon color="dark" name="arrow-back" slot="icon-only"></ion-icon>
+      </ion-button>
     }
     <ion-title> {{ title() }} </ion-title>
     @if (showInboxButton()) {
-    <app-inbox-button slot="end"></app-inbox-button>
+      <app-inbox-button slot="end"></app-inbox-button>
     }
   </ion-toolbar>`,
   styles: [

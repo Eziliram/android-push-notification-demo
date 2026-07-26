@@ -13,10 +13,10 @@ import { IonSkeletonText } from '@ionic/angular/standalone';
       [hidden]="!loaded()"
     />
     @if (!loaded()) {
-    <ion-skeleton-text
-      [ngStyle]="{ height: skeletonDiameter(), width: skeletonDiameter(), borderRadius: skeletonBorderRadius() }"
-      animated
-    ></ion-skeleton-text>
+      <ion-skeleton-text
+        [ngStyle]="{ height: skeletonDiameter(), width: skeletonDiameter(), borderRadius: skeletonBorderRadius() }"
+        animated
+      ></ion-skeleton-text>
     } `,
   styles: [
     `

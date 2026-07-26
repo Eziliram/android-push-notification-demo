@@ -25,8 +25,15 @@
     "capacitor:sync:before": "node config/build-scripts/capacitor-config.mjs $CAPACITOR_PLATFORM_NAME",
     "generate-resources": "npx capacitor-assets generate",
     "android-messaging-service": "\\cp -rfv config/android/firebaseMessagingService/* android/app/src/main/java/za/co/mamamoney/assessments/frontend/ && node config/build-scripts/firebase-messaging.mjs",
-    "android-messaging-service:win": "node config/build-scripts/firebase-messaging.mjs",
-    "android-messaging-service:win2": "node config/build-scripts/copy-firebase-service.mjs && node config/build-scripts/firebase-messaging.mjs"
+    "android-messaging-service:win": "node config/build-scripts/copy-firebase-service.mjs && node config/build-scripts/firebase-messaging.mjs",
+    "//9": "───────────────────────────────────────",
+    "//10": "Tooling",
+    "//11": "───────────────────────────────────────",
+    "lint": "ng lint",
+    "test": "ng test --watch=false",
+    "format": "prettier --write \"src/**/*.{ts,html,scss}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,html,scss}\"",
+    "verify": "npm run lint && npm run format:check"
   },
   "private": true,
   "dependencies": {
@@ -86,6 +93,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "prettier": "3.6.2",
     "typescript": "~5.4.0",
     "xmldom": "^0.6.0"
   }
